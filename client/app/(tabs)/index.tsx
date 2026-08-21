@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   ScrollView,
@@ -9,18 +10,31 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BANNERS } from "@/assets/assets";
+import { BANNERS, dummyProducts } from "@/assets/assets";
 import { useRouter } from "expo-router";
 import { CATEGORIES } from "@/constants";
 import CategoryItem from "@/components/CategoryItem";
+import { Product } from "@/constants/types";
+import ProductCard from "@/components/ProductCard";
 
 const { width } = Dimensions.get("window");
 
 export default function Home() {
   const router = useRouter();
   const [activeBannerIndex, setActiveBannerIndex] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = [{ id: "all", name: "All", icon: "grid" }, ...CATEGORIES];
+
+  const fetchProducts = async () => {
+    setProducts(dummyProducts);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
@@ -109,6 +123,26 @@ export default function Home() {
               />
             ))}
           </ScrollView>
+        </View>
+
+        {/* Popular Products */}
+        <View className="mb-8">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-xl font-bold text-primary">Popular</Text>
+            <TouchableOpacity onPress={() => router.push("/shop")}>
+              <Text className="text-secondary text-sm">See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          {loading ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <View className="flex-row flex-wrap justify-between">
+              {products.slice(0, 4).map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
