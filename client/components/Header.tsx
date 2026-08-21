@@ -14,6 +14,7 @@ export default function Header({
   showLogo,
 }: HeaderProps) {
   const router = useRouter();
+  const { itemCount } = { itemCount: 6 };
 
   return (
     <View className="flex-row items-center justify-between px-4 py-3 bg-white">
@@ -51,10 +52,23 @@ export default function Header({
       </View>
 
       {/* right side */}
-      <View className="flex-ro items-center gap-4">
+      <View className="flex-row items-center gap-4">
         {showSearch && (
           <TouchableOpacity>
             <Ionicons name="search-outline" size={24} color={COLORS.primary} />
+          </TouchableOpacity>
+        )}
+
+        {showCart && (
+          <TouchableOpacity onPress={() => router.push("/(tabs)/cart")}>
+            <View className="relative">
+              <Ionicons name="bag-outline" size={24} color={COLORS.primary} />
+              <View className="absolute -top-1 -right-1 bg-accent w-4 h-4 rounded-full items-center justify-center">
+                <Text className="text-white text-[10px] font-bold">
+                  {itemCount}
+                </Text>
+              </View>
+            </View>
           </TouchableOpacity>
         )}
       </View>
