@@ -117,6 +117,57 @@ export default function ProductDetails() {
             ))}
           </View>
         </View>
+
+        {/* Product info */}
+        <View className="px-5">
+          {/* Title & Rating */}
+          <View className="flex-row justify-between items-start mb-2">
+            <Text className="text-2xl font-bold text-primary flex-1 mr-4">
+              {product.name}
+            </Text>
+
+            <View className="flex-row justify-between items-start mb-2">
+              <Ionicons name="star" size={14} color="#FFD700" />
+              <Text className="text-sm font-bold ml-1">4.6</Text>
+              <Text className="text-xs text-secondary ml-1">(85)</Text>
+            </View>
+          </View>
+
+          {/* Price */}
+          <Text className="text-2xl font-bold text-primary mb-6">
+            ${product.price.toFixed(2)}
+          </Text>
+
+          {/* Sizes */}
+          {product.sizes && product.sizes.length > 0 && (
+            <>
+              <Text className="text-base font-bold text-primary mb-3">
+                Size
+              </Text>
+              <View className="flex-row gap-3 mb-6 flex-wrap">
+                {product.sizes.map((size) => (
+                  <TouchableOpacity
+                    key={size}
+                    onPress={() => setSelectedSize(size)}
+                    className={`w-12 h-12 rounded-full items-center justify-center border ${selectedSize === size ? "bg-primary border-primary" : "bg-white border-gray-100"}`}
+                  >
+                    <Text
+                      className={`text-sm font-medium ${selectedSize === size ? "text-white" : "text-primary"}`}
+                    >
+                      {size}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </>
+          )}
+
+          {/* Description */}
+          <Text className="text-base font-bold text-primary">Description</Text>
+          <Text className="text-secondary leading-6 mb-6">
+            {product.description}
+          </Text>
+        </View>
       </ScrollView>
     </View>
   );
