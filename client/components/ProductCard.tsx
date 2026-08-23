@@ -13,7 +13,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <TouchableOpacity className="w-[48%] mb-4 bg-white rounded-lg overflow-hidden">
         <View className="relative h-56 w-full bg-gray-100">
           <Image
-            source={{ uri: product.images[0] }}
+            source={{ uri: product.images?.[0] ?? "" }}
             className="w-full h-full"
             resizeMode="cover"
           />
