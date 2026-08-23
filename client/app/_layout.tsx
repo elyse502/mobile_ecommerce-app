@@ -9,7 +9,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <CartProvider>
         <WishlistProvider>
-          <Stack screenOptions={{ headerShown: false }} />;
+          <Stack screenOptions={{ headerShown: false }} />
         </WishlistProvider>
       </CartProvider>
     </GestureHandlerRootView>
