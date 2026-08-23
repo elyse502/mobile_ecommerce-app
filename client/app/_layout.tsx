@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import "@/global.css";
-import { CartProvider } from "@/context/cartContext";
+import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
