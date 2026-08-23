@@ -33,13 +33,14 @@ export default function ProductDetails() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const fetchProduct = async () => {
-    setProduct(dummyProducts.find((product) => product._id === id) as any);
+    const found: any = dummyProducts.find((product) => product._id === id);
+    setProduct(found ?? null);
     setLoading(false);
   };
 
   useEffect(() => {
     fetchProduct();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return (
@@ -64,7 +65,7 @@ export default function ProductDetails() {
       Toast.show({
         type: "info",
         text1: "No Size Selected",
-        text2: "Please selet a size",
+        text2: "Please select a size",
       });
       return;
     }
@@ -83,7 +84,7 @@ export default function ProductDetails() {
             showsHorizontalScrollIndicator={false}
             scrollEventThrottle={16}
             onScroll={(e) => {
-              const slide = Math.ceil(
+              const slide = Math.round(
                 e.nativeEvent.contentOffset.x /
                   e.nativeEvent.layoutMeasurement.width,
               );
