@@ -1,7 +1,10 @@
 import { dummyProducts } from "@/assets/assets";
 import Header from "@/components/Header";
+import { COLORS } from "@/constants";
 import { Product } from "@/constants/types";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shop() {
@@ -52,6 +55,28 @@ export default function Shop() {
   return (
     <SafeAreaView className="flex-1 bg-surface" edges={["top"]}>
       <Header title="Shop" showBack showCart />
+
+      <View className="flex-row gap-2 mb-3 mx-4 my-2">
+        {/* search bar */}
+        <View className="flex-1 flex-row items-center bg-white rounded-xl border border-gray-100">
+          <Ionicons
+            name="search"
+            className="ml-4"
+            size={20}
+            color={COLORS.secondary}
+          />
+          <TextInput
+            className="flex-1 ml-2 text-primary px-4 py-3"
+            placeholder="Search products..."
+            returnKeyType="search"
+          />
+        </View>
+
+        {/* filter icon */}
+        <TouchableOpacity className="bg-gray-800 w-12 h-12 items-center justify-center rounded-xl">
+          <Ionicons name="options-outline" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
