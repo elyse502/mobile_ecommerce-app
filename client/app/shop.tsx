@@ -1,10 +1,17 @@
 import { dummyProducts } from "@/assets/assets";
 import Header from "@/components/Header";
+import ProductCard from "@/components/ProductCard";
 import { COLORS } from "@/constants";
 import { Product } from "@/constants/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shop() {
@@ -69,6 +76,7 @@ export default function Shop() {
             className="flex-1 ml-2 text-primary px-4 py-3"
             placeholder="Search products..."
             returnKeyType="search"
+            placeholderTextColor={COLORS.secondary}
           />
         </View>
 
@@ -77,6 +85,21 @@ export default function Shop() {
           <Ionicons name="options-outline" size={24} color="white" />
         </TouchableOpacity>
       </View>
+
+      {loading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item._id}
+          numColumns={2}
+          contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+          renderItem={({ item }) => <ProductCard product={item} />}
+        />
+      )}
     </SafeAreaView>
   );
 }
