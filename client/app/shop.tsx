@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -98,6 +99,22 @@ export default function Shop() {
           contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           renderItem={({ item }) => <ProductCard product={item} />}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            loadingMore ? (
+              <View className="py-4">
+                <ActivityIndicator size="small" color={COLORS.primary} />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            !loading && (
+              <View className="flex-1 items-center justify-center py-20">
+                <Text className="text-secondary">No products found</Text>
+              </View>
+            )
+          }
         />
       )}
     </SafeAreaView>
