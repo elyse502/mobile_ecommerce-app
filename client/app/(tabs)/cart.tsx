@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
+import CartItem from "@/components/CartItem";
 
 export default function Cart() {
   const { cartItems, cartTotal, removeFromCart, updateQuantity } = useCart();
@@ -20,7 +21,12 @@ export default function Cart() {
             showsVerticalScrollIndicator={false}
           >
             {cartItems.map((item, index) => (
-              <Text key={index}>{item.product.name}</Text>
+              <CartItem
+                key={index}
+                item={item}
+                onRemove={() => removeFromCart(item.id, item.size)}
+                onUpdateQuantity={(q) => updateQuantity(item.id, q, item.size)}
+              />
             ))}
           </ScrollView>
         </>
