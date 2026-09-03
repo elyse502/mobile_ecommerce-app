@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
