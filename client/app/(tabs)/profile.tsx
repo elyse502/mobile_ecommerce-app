@@ -5,12 +5,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, PROFILE_MENU } from "@/constants";
+import { useClerk } from "@clerk/clerk-expo";
 
 export default function Profile() {
-  const { user } = { user: dummyUser };
+  const { user, signOut } = useClerk();
   const router = useRouter();
 
   const handleLogout = async () => {
+    await signOut();
     router.replace("/sign-in");
   };
 
