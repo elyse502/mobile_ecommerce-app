@@ -181,6 +181,52 @@ export default function Checkout() {
           )}
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Order summary */}
+      <View className="p-4 bg-white shadow-lg border-t border-gray-100">
+        <Text className="text-lg font-bold text-primary mb-4">
+          Order Summary
+        </Text>
+
+        {/* Subtotal */}
+        <View className="flex-row justify-between mb-2">
+          <Text className="text-secondary">Subtotal</Text>
+          <Text className="font-bold">${cartTotal.toFixed(2)}</Text>
+        </View>
+
+        {/* Shipping */}
+        <View className="flex-row justify-between mb-2">
+          <Text className="text-secondary">Shipping</Text>
+          <Text className="font-bold">${shipping.toFixed(2)}</Text>
+        </View>
+
+        {/* Tax */}
+        <View className="flex-row justify-between mb-4">
+          <Text className="text-secondary">Tax</Text>
+          <Text className="font-bold">${tax.toFixed(2)}</Text>
+        </View>
+
+        {/* Total */}
+        <View className="flex-row justify-between mb-6">
+          <Text className="text-primary text-xl font-bold">Total</Text>
+          <Text className="text-primary text-xl font-bold">
+            ${total.toFixed(2)}
+          </Text>
+        </View>
+
+        {/* Place Order Button */}
+        <TouchableOpacity
+          onPress={handlePlaceOrder}
+          disabled={loading}
+          className={`p-4 rounded-xl items-center ${loading ? "bg-gray-400" : "bg-primary"}`}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white font-bold text-lg">Place Order</Text>
+          )}
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
