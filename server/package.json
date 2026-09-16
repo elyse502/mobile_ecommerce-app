@@ -1,15 +1,17 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An Express server for the mobile e-commerce application",
+  "main": "server.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsx server.ts",
+    "server": "nodemon --exec tsx server.ts",
+    "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "ElyséeDev",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
