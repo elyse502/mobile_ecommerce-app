@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Product from "../models/Products.js";
 import cloudinary from "../config/cloudinary.js";
 
-// Get all procucts
+// Get all products
 // GET /api/products
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -28,7 +28,7 @@ export const getProducts = async (req: Request, res: Response) => {
   }
 };
 
-// Get single procuct
+// Get single product
 // GET /api/products/:id
 export const getProduct = async (req: Request, res: Response) => {
   try {
