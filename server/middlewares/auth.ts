@@ -23,3 +23,18 @@ export const protect = async (
     res.status(500).json({ success: false, message: "Authentication failed" });
   }
 };
+
+export const authorize = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "User role is not authorized to access this route",
+        });
+    }
+
+    next();
+  };
+};
