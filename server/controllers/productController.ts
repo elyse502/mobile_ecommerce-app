@@ -187,3 +187,39 @@ export const updateProduct = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Delete product
+// DELETE /api/products/:id
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+
+    // Delete images from Cloudinary
+    if (product.images && product.images.length > 0) {
+      const deletePromises = product.images.map((imageUrl) => {
+        const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.[a-z]+$/);
+        const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+        if (publicId) {
+          return cloudinary.uploader.destroy(publicId);
+        }
+
+        return Promise.resolve();
+      });
+
+      await Promise.all(deletePromises);
+    }
+
+    await Product.findByIdAndDelete(req.params.id);
+
+    res.json({ success: true, message: "Product deleted" });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
