@@ -123,7 +123,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
 // Update order status
 // PUT /api/orders/:id/status
-export const updateOrder = async (req: Request, res: Response) => {
+export const updateOrderStatus = async (req: Request, res: Response) => {
   try {
     const { orderStatus, paymentStatus } = req.body;
 
