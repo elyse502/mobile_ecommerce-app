@@ -146,3 +146,34 @@ export const updateOrder = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Get all orders (admin only)
+// GET /api/orders/admin/all
+export const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const { page = 1, limit = 20, status } = req.query;
+    const query: any = {};
+
+    if (status) query.orderStatus = status;
+
+    const total = await Order.countDocuments(query);
+
+    const orders = await Order.find(query)
+      .populate("user", "name email")
+      .populate("items.product", "name")
+      .sort("-createdAt")
+      .skip((Number(page) - 1) * Number(limit));
+
+    res.json({
+      success: true,
+      data: orders,
+      pagination: {
+        total,
+        page: Number(page),
+        pages: Math.ceil(total / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
