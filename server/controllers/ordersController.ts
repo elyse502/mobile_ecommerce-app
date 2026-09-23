@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import Order from "../models/Order.js";
+import Cart from "../models/Cart.js";
+import Product from "../models/Products.js";
 
 // Get user orders
 // GET /api/orders
@@ -41,6 +43,79 @@ export const getOrder = async (req: Request, res: Response) => {
     }
 
     res.json({ success: true, data: order });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Create order from cart
+// POST /api/orders
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const { shippingAddress, notes } = req.body;
+    const cart = await Cart.findOne({ user: req.user._id }).populate(
+      "items.product",
+    );
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ success: false, message: "Cart is empty" });
+    }
+
+    // Verify stock and prepare order items
+    const orderItems = [];
+
+    for (const item of cart.items) {
+      const product = await Product.findById(item.product._id);
+
+      if (!product || product.stock < item.quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient stock for ${(item.product as any).name}`,
+        });
+      }
+
+      orderItems.push({
+        product: item.product._id,
+        name: (item.product as any).name,
+        quantity: item.quantity,
+        price: item.price,
+        size: item.size,
+      });
+
+      // Reduce stock
+      product.stock -= item.quantity;
+
+      await product.save();
+    }
+
+    const subtotal = cart.totalAmount;
+    const shippingCost = 2;
+    const tax = 0;
+    const totalAmount = subtotal + shippingCost + tax;
+
+    const order = await Order.create({
+      user: req.user._id,
+      items: orderItems,
+      shippingAddress,
+      paymentMethod: req.body.paymentMethod || "cash",
+      paymentStatus: "pending",
+      subtotal,
+      shippingCost,
+      tax,
+      totalAmount,
+      notes,
+      paymentIntentId: req.body.paymentIntentId,
+      orderNumber: "ORD-" + Date.now(),
+    });
+
+    if (req.body.paymentMethod !== "stripe") {
+      cart.items = [];
+      cart.totalAmount = 0;
+
+      await cart.save();
+    }
+
+    res.status(201).json({ success: true, data: order });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
