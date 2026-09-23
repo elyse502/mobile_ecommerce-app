@@ -6,6 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { clerkWebhook } from "./controllers/webhooks.js";
 import makeAdmin from "./scripts/makeAdmin.js";
 import ProductRouter from "./routes/productsRoutes.js";
+import CartRouter from "./routes/cartRoutes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server is Live! ⌛");
 });
 app.use("/api/products", ProductRouter);
+app.use("/api/cart", CartRouter);
 
 await makeAdmin();
 
