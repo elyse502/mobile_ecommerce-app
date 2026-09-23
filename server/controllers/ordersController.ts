@@ -120,3 +120,29 @@ export const createOrder = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Update order status
+// PUT /api/orders/:id/status
+export const updateOrder = async (req: Request, res: Response) => {
+  try {
+    const { orderStatus, paymentStatus } = req.body;
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    if (orderStatus) order.orderStatus = orderStatus;
+    if (paymentStatus) order.paymentStatus = paymentStatus;
+    if (orderStatus === "delivered") order.deliveredAt = new Date();
+
+    await order.save();
+
+    res.json({ success: true, data: order });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
