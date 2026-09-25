@@ -8,6 +8,7 @@ import makeAdmin from "./scripts/makeAdmin.js";
 import ProductRouter from "./routes/productsRoutes.js";
 import CartRouter from "./routes/cartRoutes.js";
 import OrderRouter from "./routes/ordersRoutes.js";
+import AddressRouter from "./routes/addressRoutes.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/products", ProductRouter);
 app.use("/api/cart", CartRouter);
 app.use("/api/orders", OrderRouter);
+app.use("/api/addresses", AddressRouter);
 
 await makeAdmin();
 
