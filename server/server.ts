@@ -9,6 +9,7 @@ import ProductRouter from "./routes/productsRoutes.js";
 import CartRouter from "./routes/cartRoutes.js";
 import OrderRouter from "./routes/ordersRoutes.js";
 import AddressRouter from "./routes/addressRoutes.js";
+import AdminRouter from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/api/products", ProductRouter);
 app.use("/api/cart", CartRouter);
 app.use("/api/orders", OrderRouter);
 app.use("/api/addresses", AddressRouter);
+app.use("/api/admin", AdminRouter);
 
 await makeAdmin();
 
