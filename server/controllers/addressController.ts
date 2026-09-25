@@ -15,3 +15,30 @@ export const getAddresses = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Add new address
+// POST /api/addresses
+export const addAddress = async (req: Request, res: Response) => {
+  try {
+    const { type, street, city, state, zipCode, country, isDefault } = req.body;
+
+    if (isDefault) {
+      await Address.updateMany({ user: req.user._id }, { isDefault: false });
+    }
+
+    const newAddress = await Address.create({
+      user: req.user._id,
+      type,
+      street,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault: isDefault || false,
+    });
+
+    res.status(201).json({ success: true, data: newAddress });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
