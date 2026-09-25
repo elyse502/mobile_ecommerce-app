@@ -42,3 +42,48 @@ export const addAddress = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Update address
+// PUT /api/addresses/:id
+export const updateAddress = async (req: Request, res: Response) => {
+  try {
+    const { type, street, city, state, zipCode, country, isDefault } = req.body;
+
+    let addressItem = await Address.findById(req.params.id);
+
+    if (!addressItem) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
+    }
+
+    // Ensure user owns address
+    if (addressItem.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authorized" });
+    }
+
+    if (isDefault) {
+      await Address.updateMany({ user: req.user._id }, { isDefault: false });
+    }
+
+    addressItem = await Address.findByIdAndUpdate(
+      req.params.id,
+      {
+        type,
+        street,
+        city,
+        state,
+        zipCode,
+        country,
+        isDefault,
+      },
+      { new: true },
+    );
+
+    res.json({ success: true, data: addressItem });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
