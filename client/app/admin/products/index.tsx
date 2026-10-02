@@ -12,18 +12,35 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants";
-import { dummyProducts } from "@/assets/assets";
+import { useAuth } from "@clerk/clerk-expo";
+import api from "@/constants/api";
+import Toast from "react-native-toast-message";
 
 export default function AdminProducts() {
+  const { getToken } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [products, setProducts] = useState([]);
 
   const fetchProducts = async () => {
-    setProducts(dummyProducts as any);
-    setLoading(false);
-    setRefreshing(false);
+    try {
+      const { data } = await api.get("/products", { params: { limit: 999 } });
+
+      if (data.success) {
+        setProducts(data.data);
+      }
+    } catch (error: any) {
+      console.error("Failed to fetch products:", error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to fetch Products",
+        text2: error.reponse?.data?.message || "Something went wrong",
+      });
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
