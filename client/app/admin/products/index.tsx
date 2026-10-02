@@ -53,7 +53,29 @@ export default function AdminProducts() {
   };
 
   const performDelete = async (id: string) => {
-    setProducts(products.filter((product: any) => product._id !== id) as any);
+    try {
+      const token = await getToken();
+      const { data } = await api.delete(`/products/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Product deleted",
+        });
+
+        fetchProducts();
+      }
+    } catch (error: any) {
+      console.error("Failed to delete product:", error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to Delete Product",
+        text2: error.reponse?.data?.message || "Something went wrong",
+      });
+    }
   };
 
   const deleteProduct = async (id: string) => {
