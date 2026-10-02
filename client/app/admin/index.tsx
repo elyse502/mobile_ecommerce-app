@@ -8,9 +8,11 @@ import {
   RefreshControl,
 } from "react-native";
 import { COLORS, getStatusColor } from "@/constants";
-import { dummyAdminStats } from "@/assets/assets";
+import { useAuth } from "@clerk/clerk-expo";
+import api from "@/constants/api";
 
 export default function AdminDashboard() {
+  const { getToken } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -23,9 +25,23 @@ export default function AdminDashboard() {
   });
 
   const fetchStats = async () => {
-    setStats(dummyAdminStats as any);
-    setLoading(false);
-    setRefreshing(false);
+    try {
+      const token = await getToken();
+      const { data } = await api.get("/admin/stats", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        setStats(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch admin stats:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
