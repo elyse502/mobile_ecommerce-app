@@ -18,7 +18,6 @@ import Toast from "react-native-toast-message";
 import { COLORS, CATEGORIES } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { dummyProducts } from "@/assets/assets";
 import { useAuth } from "@clerk/clerk-expo";
 import api from "@/constants/api";
 
@@ -130,6 +129,7 @@ export default function EditProduct() {
 
     try {
       setSubmitting(true);
+      const token = await getToken();
       const formData = new FormData();
 
       formData.append("name", name);
@@ -162,7 +162,23 @@ export default function EditProduct() {
           } as any);
         }
       }
-      router.back();
+
+      const { data } = await api.put(`/products/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (data.success) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Product updated successfully",
+        });
+
+        router.replace("/admin/products");
+      }
     } catch (error: any) {
       console.error("Failed to update product:", error);
       Toast.show({
