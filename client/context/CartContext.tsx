@@ -134,7 +134,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
     productId: string,
     quantity: number,
     size: string = "M",
-  ) => {};
+  ) => {
+    if (!isSignedIn) return;
+    if (quantity < 1) return;
+
+    try {
+      setIsLoading(true);
+      const token = await getToken();
+
+      const { data } = await api.put(
+        `/cart/item/${productId}`,
+        { quantity, size },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      if (data.success) {
+        await fetchCart();
+      }
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const clearCart = async () => {};
 
   const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
