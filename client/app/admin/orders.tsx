@@ -70,15 +70,28 @@ export default function AdminOrders() {
 
   const updateStatus = async (newStatus: string) => {
     if (!selectedOrder) return;
-    setOrders(
-      orders.map((order: any) =>
-        order._id === selectedOrder._id
-          ? { ...order, orderStatus: newStatus }
-          : order,
-      ) as any,
-    );
-    setStatusModalVisible(false);
-    setUpdating(false);
+
+    try {
+      const token = await getToken();
+      const { data } = await api.put(
+        `/orders/${selectedOrder._id}/status`,
+        { orderStatus: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (data.success) {
+        Alert.alert("Success", "Order status updated");
+        setStatusModalVisible(false);
+        fetchOrders();
+      }
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      Alert.alert("Error", "Failed to update status");
+    } finally {
+      setUpdating(false);
+    }
   };
 
   if (loading && !refreshing) {
