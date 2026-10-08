@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import Toast from "react-native-toast-message";
 
 export type CartItem = {
   id: string;
@@ -73,7 +74,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addToCart = async (product: Product, size: string) => {};
+  const addToCart = async (product: Product, size: string) => {
+    if (!isSignedIn) {
+      return Toast.show({
+        type: "error",
+        text1: "Please login to add to cart",
+      });
+    }
+
+    try {
+      setIsLoading(true);
+      const token = await getToken();
+
+      const { data } = await api.post(
+        "/cart/add",
+        { productId: product._id, quantity: 1, size },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (data.success) {
+        await fetchCart();
+      }
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to add to cart",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removeFromCart = async (productId: string, size: string) => {};
   const updateQuantity = async (
     productId: string,
