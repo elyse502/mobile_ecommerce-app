@@ -158,7 +158,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const clearCart = async () => {};
+  const clearCart = async () => {
+    if (!isSignedIn) return;
+
+    try {
+      setIsLoading(true);
+      const token = await getToken();
+
+      const { data } = await api.delete("/cart", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        setCartItems([]);
+        setCartTotal(0);
+      }
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
