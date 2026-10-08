@@ -108,7 +108,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const removeFromCart = async (productId: string, size: string) => {};
+  const removeFromCart = async (productId: string, size: string) => {
+    if (!isSignedIn) return;
+
+    try {
+      setIsLoading(true);
+      const token = await getToken();
+
+      const { data } = await api.delete(
+        `/cart/item/${productId}?size=${size}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      if (data.success) {
+        await fetchCart();
+      }
+    } catch (error) {
+      console.error("Failed to remove from cart:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const updateQuantity = async (
     productId: string,
     quantity: number,
