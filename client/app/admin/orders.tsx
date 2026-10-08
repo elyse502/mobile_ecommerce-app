@@ -13,9 +13,11 @@ import {
 } from "react-native";
 import { COLORS, getStatusColor } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
-import { dummyOrders, dummyUser } from "@/assets/assets";
+import { useAuth } from "@clerk/clerk-expo";
+import api from "@/constants/api";
 
 export default function AdminOrders() {
+  const { getToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -34,14 +36,22 @@ export default function AdminOrders() {
   ];
 
   const fetchOrders = async () => {
-    setOrders(
-      dummyOrders.map((order: any) => ({
-        ...order,
-        user: dummyUser,
-      })) as any,
-    );
-    setLoading(false);
-    setRefreshing(false);
+    try {
+      const token = await getToken();
+      const { data } = await api.get("/orders/admin/all", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        setOrders(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+      Alert.alert("Error", "Failed to load orders");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
