@@ -1,5 +1,6 @@
-import { dummyCart } from "@/assets/assets";
+import api from "@/constants/api";
 import { Product } from "@/constants/types";
+import { useAuth } from "@clerk/clerk-expo";
 import {
   createContext,
   ReactNode,
@@ -35,25 +36,41 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { getToken, isSignedIn } = useAuth();
+
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [cartTotal, setCartTotal] = useState(0);
 
   const fetchCart = async () => {
-    setIsLoading(true);
-    const serverCart = dummyCart;
-    const mappedItems: CartItem[] = serverCart.items.map((item: any) => ({
-      id: item.product._id,
-      productId: item.product._id,
-      product: item.product,
-      quantity: item.quantity,
-      size: item?.size || "M",
-      price: item.price,
-    }));
+    try {
+      setIsLoading(true);
+      const token = await getToken();
 
-    setCartItems(mappedItems);
-    setCartTotal(serverCart.totalAmount);
-    setIsLoading(false);
+      const { data } = await api.get("/cart", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success && data.data) {
+        const serverCart = data.data;
+
+        const mappedItems: CartItem[] = serverCart.items.map((item: any) => ({
+          id: item.product._id,
+          productId: item.product._id,
+          product: item.product,
+          quantity: item.quantity,
+          size: item?.size || "M",
+          price: item.price,
+        }));
+
+        setCartItems(mappedItems);
+        setCartTotal(serverCart.totalAmount);
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const addToCart = async (product: Product, size: string) => {};
@@ -68,8 +85,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    if (isSignedIn) {
+      fetchCart();
+    } else {
+      setCartItems([]);
+      setCartTotal(0);
+    }
+  }, [isSignedIn]);
 
   return (
     <CartContext.Provider
