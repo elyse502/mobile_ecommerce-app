@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
@@ -114,7 +115,35 @@ export default function Addresses() {
     }
   };
 
-  const handleDeleteAddress = async (id: string) => {};
+  const handleDeleteAddress = async (id: string) => {
+    Alert.alert(
+      "Delete Address",
+      "Are you sure you want to delete this address?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const token = await getToken();
+              await api.delete(`/addresses/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+
+              fetchAddresses();
+            } catch (error: any) {
+              Toast.show({
+                type: "error",
+                text1: "Failed to Delete Address",
+                text2: error.response?.data?.message || "Something went wrong",
+              });
+            }
+          },
+        },
+      ],
+    );
+  };
 
   const resetForm = () => {
     setStreet("");
