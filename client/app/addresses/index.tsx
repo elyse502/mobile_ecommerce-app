@@ -75,9 +75,43 @@ export default function Addresses() {
   };
 
   const handleSaveAddress = async () => {
-    setModalVisible(false);
-    resetForm();
-    fetchAddresses();
+    if (!street || !city || !state || !zipCode || !country) {
+      Toast.show({
+        type: "error",
+        text1: "Missing Fields",
+        text2: "Please fill in all fields",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const token = await getToken();
+      const data = { type, street, city, state, zipCode, country, isDefault };
+
+      if (isEditing && editingId) {
+        await api.put(`/addresses/${editingId}`, data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } else {
+        await api.post("/addresses", data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+
+      setModalVisible(false);
+      resetForm();
+      fetchAddresses();
+    } catch (error: any) {
+      Toast.show({
+        type: "error",
+        text1: "Failed to Save Address",
+        text2: error.response?.data?.message || "Something went wrong",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleDeleteAddress = async (id: string) => {};
