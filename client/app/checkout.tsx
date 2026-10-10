@@ -1,8 +1,9 @@
-import { dummyAddress } from "@/assets/assets";
 import Header from "@/components/Header";
 import { COLORS } from "@/constants";
+import api from "@/constants/api";
 import { Address } from "@/constants/types";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 export default function Checkout() {
+  const { getToken } = useAuth();
+
   const { cartTotal } = useCart();
   const router = useRouter();
 
@@ -31,15 +34,29 @@ export default function Checkout() {
   const total = cartTotal + shipping + tax;
 
   const fetchAddress = async () => {
-    const addrList = dummyAddress;
+    try {
+      const token = await getToken();
+      const { data } = await api.get("/addresses", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (addrList.length > 0) {
-      // Find default or first address
-      const def = addrList.find((a: any) => a.isDefault) || addrList[0];
-      setSelectedAddress(def as Address);
+      const addrList = data.data;
+
+      if (addrList.length > 0) {
+        // Find default or first
+        const def = addrList.find((a: Address) => a.isDefault) || addrList[0];
+        setSelectedAddress(def);
+      }
+    } catch (error) {
+      console.error("Error fetching checkout data:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to load checkout information",
+      });
+    } finally {
+      setPageLoading(false);
     }
-
-    setPageLoading(false);
   };
 
   const handlePlaceOrder = async () => {
