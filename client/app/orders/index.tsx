@@ -14,16 +14,30 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import { COLORS, getStatusColor } from "@/constants";
 import type { Order } from "@/constants/types";
-import { dummyOrders, formatDate } from "@/assets/assets";
+import { formatDate } from "@/assets/assets";
+import { useAuth } from "@clerk/clerk-expo";
+import api from "@/constants/api";
 
 export default function Orders() {
+  const { getToken } = useAuth();
+
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
-    setOrders(dummyOrders as any[]);
-    setLoading(false);
+    try {
+      const token = await getToken();
+      const { data } = await api.get("/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setOrders(data.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
