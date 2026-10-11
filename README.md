@@ -788,7 +788,7 @@ in the Software without restriction...
 
 ---
 
-_From product discovery to checkout — a complete mobile shopping experience_
+_From product discovery to checkout — a complete mobile shopping experience 🏪_
 
 [⬆ Back to Top](#-table-of-contents)
 
