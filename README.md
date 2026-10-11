@@ -32,6 +32,7 @@ A mobile-first shopping experience with secure authentication, product discovery
 - [Overview](#-overview)
 - [Highlights](#-highlights)
 - [Feature Set](#-feature-set)
+- [Screenshots](#-screenshots)
 - [Technology Stack](#-technology-stack)
 - [Architecture](#-architecture)
 - [Application Structure](#-application-structure)
@@ -128,6 +129,42 @@ The following features are reflected in the repository structure and supplied pr
 The server includes dedicated routes and controllers for products, carts, addresses, orders, and administrative operations. It also contains a webhook controller, user and commerce models, database configuration, and scripts for seeding products and assigning an administrator role.
 
 The presence of a webhook controller indicates an integration point for external event handling. Configure and verify webhook events and signature validation for the exact provider before relying on them in production.
+
+---
+
+## 📸 Screenshots
+
+A visual walkthrough of the customer and administrator journeys. All screenshots are stored in `assets/screenshots/`.
+
+### 🔐 Authentication
+
+|                                   Sign In                                   |                                   Sign Up                                   |
+| :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| <img src="assets/screenshots/signIn_page.jpeg" alt="Sign In" width="220" /> | <img src="assets/screenshots/signUp_page.jpeg" alt="Sign Up" width="220" /> |
+
+### 🛍️ Customer Experience
+
+|                                  Home                                  |                                   All Products                                    |                                     Product Details                                     |
+| :--------------------------------------------------------------------: | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: |
+| <img src="assets/screenshots/home_page.jpeg" alt="Home" width="220" /> | <img src="assets/screenshots/all_products.jpeg" alt="All Products" width="220" /> | <img src="assets/screenshots/product_details.jpeg" alt="Product Details" width="220" /> |
+
+|                                  Cart                                  |                                    Wishlist                                    |                                    Checkout                                    |
+| :--------------------------------------------------------------------: | :----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
+| <img src="assets/screenshots/cart_page.jpeg" alt="Cart" width="220" /> | <img src="assets/screenshots/wishList_page.jpeg" alt="Wishlist" width="220" /> | <img src="assets/screenshots/checkout_page.jpeg" alt="Checkout" width="220" /> |
+
+|                                         Orders                                         |                                   Profile                                    |     |
+| :------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-: |
+| <img src="assets/screenshots/clientOrder_page.jpeg" alt="Client Orders" width="220" /> | <img src="assets/screenshots/profile_page.jpeg" alt="Profile" width="220" /> |     |
+
+### 🛠️ Administration
+
+|                                    Admin Dashboard                                     |                                    Products Management                                    |                                   Orders Management                                   |
+| :------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
+| <img src="assets/screenshots/adminDashboard.jpeg" alt="Admin Dashboard" width="220" /> | <img src="assets/screenshots/adminProducts_page.jpeg" alt="Admin Products" width="220" /> | <img src="assets/screenshots/adminOrders_page.jpeg" alt="Admin Orders" width="220" /> |
+
+|                                         Add New Product                                         |     |     |
+| :---------------------------------------------------------------------------------------------: | :-: | :-: |
+| <img src="assets/screenshots/adminAddNewProduct_form.jpeg" alt="Add New Product" width="220" /> |     |     |
 
 ---
 
@@ -253,7 +290,8 @@ mobile_ecommerce-app/
 │   │   ├── 📄 shop.tsx
 │   │   └── 📄 _layout.tsx
 │   ├── 📁 assets/
-│   │   └── 📁 products-images/
+│   │   ├── 📁 products-images/
+│   │   └── 📁 screenshots/
 │   ├── 📁 components/
 │   │   ├── 📄 CartItem.tsx
 │   │   ├── 📄 CategoryItem.tsx
@@ -305,18 +343,19 @@ mobile_ecommerce-app/
 
 ### 📂 Folder Responsibilities
 
-| Folder                    | Responsibility                                                                                                                                                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`client/app/`**         | Contains route screens. Route groups organize authentication and tab-based navigation, while dynamic segments such as `product/[id].tsx` and `orders/[id].tsx` represent resource-specific screens |
-| **`client/components/`**  | Contains reusable interface components used across shopping screens                                                                                                                                |
-| **`client/context/`**     | Holds shared cart and wishlist state providers                                                                                                                                                     |
-| **`client/constants/`**   | Contains API configuration and shared constants or types                                                                                                                                           |
-| **`server/routes/`**      | Maps HTTP endpoints to middleware and controller functions                                                                                                                                         |
-| **`server/controllers/`** | Contains request-handling logic for commerce resources                                                                                                                                             |
-| **`server/models/`**      | Defines Mongoose models for application data                                                                                                                                                       |
-| **`server/middlewares/`** | Contains authentication and upload middleware                                                                                                                                                      |
-| **`server/config/`**      | Contains database and Cloudinary configuration                                                                                                                                                     |
-| **`server/scripts/`**     | Provides scripts for product seeding and administrator setup                                                                                                                                       |
+| Folder                           | Responsibility                                                                                                                                                                                     |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`client/app/`**                | Contains route screens. Route groups organize authentication and tab-based navigation, while dynamic segments such as `product/[id].tsx` and `orders/[id].tsx` represent resource-specific screens |
+| **`client/assets/screenshots/`** | Stores UI screenshots used in this README                                                                                                                                                          |
+| **`client/components/`**         | Contains reusable interface components used across shopping screens                                                                                                                                |
+| **`client/context/`**            | Holds shared cart and wishlist state providers                                                                                                                                                     |
+| **`client/constants/`**          | Contains API configuration and shared constants or types                                                                                                                                           |
+| **`server/routes/`**             | Maps HTTP endpoints to middleware and controller functions                                                                                                                                         |
+| **`server/controllers/`**        | Contains request-handling logic for commerce resources                                                                                                                                             |
+| **`server/models/`**             | Defines Mongoose models for application data                                                                                                                                                       |
+| **`server/middlewares/`**        | Contains authentication and upload middleware                                                                                                                                                      |
+| **`server/config/`**             | Contains database and Cloudinary configuration                                                                                                                                                     |
+| **`server/scripts/`**            | Provides scripts for product seeding and administrator setup                                                                                                                                       |
 
 ---
 
@@ -692,7 +731,6 @@ The following are possible next steps, not claims about existing functionality:
 | Add pagination, filtering, sorting, and search where needed for larger catalogs                                           | Medium   |
 | Add CI checks for linting, TypeScript compilation, and tests                                                              | Medium   |
 | Document deployment steps and maintain separate development and production environment configurations                     | Medium   |
-| Add screenshots or a short demonstration video to make the repository easier to evaluate                                  | Low      |
 | Add accessibility checks and test on multiple screen sizes and Android/iOS devices                                        | Low      |
 | Add a clear payment-provider integration and verified order lifecycle if online payments are part of the intended product | Low      |
 
