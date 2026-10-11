@@ -1,4 +1,5 @@
 import axios from "axios";
+/**
 import { Platform } from "react-native";
 
 const LOCAL_API_URL = Platform.select({
@@ -8,5 +9,10 @@ const LOCAL_API_URL = Platform.select({
 });
 
 const api = axios.create({ baseURL: LOCAL_API_URL });
+ */
+
+const api = axios.create({
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
+});
 
 export default api;

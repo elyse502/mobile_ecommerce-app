@@ -45,3 +45,6 @@ app-example
 
 # local files
 .DS_Store
+
+# local folder for EAS builds
+eas-archive-check
