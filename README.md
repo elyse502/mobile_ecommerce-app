@@ -152,9 +152,9 @@ A visual walkthrough of the customer and administrator journeys. All screenshots
 | :--------------------------------------------------------------------: | :----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
 | <img src="assets/screenshots/cart_page.jpeg" alt="Cart" width="220" /> | <img src="assets/screenshots/wishList_page.jpeg" alt="Wishlist" width="220" /> | <img src="assets/screenshots/checkout_page.jpeg" alt="Checkout" width="220" /> |
 
-|                                         Orders                                         |                                   Profile                                    |     |
-| :------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-: |
-| <img src="assets/screenshots/clientOrder_page.jpeg" alt="Client Orders" width="220" /> | <img src="assets/screenshots/profile_page.jpeg" alt="Profile" width="220" /> |     |
+|                                         Orders                                         |                                   Profile                                    |                                      Shipping Addresses                                       |
+| :------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: |
+| <img src="assets/screenshots/clientOrder_page.jpeg" alt="Client Orders" width="220" /> | <img src="assets/screenshots/profile_page.jpeg" alt="Profile" width="220" /> | <img src="assets/screenshots/shipping_addresses.jpeg" alt="Shipping Addresses" width="220" /> |
 
 ### 🛠️ Administration
 
@@ -162,9 +162,9 @@ A visual walkthrough of the customer and administrator journeys. All screenshots
 | :------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
 | <img src="assets/screenshots/adminDashboard.jpeg" alt="Admin Dashboard" width="220" /> | <img src="assets/screenshots/adminProducts_page.jpeg" alt="Admin Products" width="220" /> | <img src="assets/screenshots/adminOrders_page.jpeg" alt="Admin Orders" width="220" /> |
 
-|                                         Add New Product                                         |     |     |
-| :---------------------------------------------------------------------------------------------: | :-: | :-: |
-| <img src="assets/screenshots/adminAddNewProduct_form.jpeg" alt="Add New Product" width="220" /> |     |     |
+|                                         Add New Product                                         |                                   Edit Product                                    |                                  Order Status Management                                   |
+| :---------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+| <img src="assets/screenshots/adminAddNewProduct_form.jpeg" alt="Add New Product" width="220" /> | <img src="assets/screenshots/edit_product.jpeg" alt="Edit Product" width="220" /> | <img src="assets/screenshots/order_status-updation.jpeg" alt="Order Status" width="220" /> |
 
 ---
 
